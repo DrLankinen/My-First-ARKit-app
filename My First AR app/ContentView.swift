@@ -10,29 +10,15 @@ import SwiftUI
 import RealityKit
 
 struct ContentView : View {
+    @ObservedObject var data: DataModel = DataModel()
     var body: some View {
-        return ARViewContainer().edgesIgnoringSafeArea(.all)
+        HStack {
+            ARUIView()
+            if data.enableAR { ARDisplayView() }
+            else { Spacer() }
+        }
+        .environmentObject(data)
     }
-}
-
-struct ARViewContainer: UIViewRepresentable {
-    
-    func makeUIView(context: Context) -> ARView {
-        
-        let arView = ARView(frame: .zero)
-        
-        // Load the "Box" scene from the "Experience" Reality File
-        let boxAnchor = try! Experience.loadBox()
-        
-        // Add the box anchor to the scene
-        arView.scene.anchors.append(boxAnchor)
-        
-        return arView
-        
-    }
-    
-    func updateUIView(_ uiView: ARView, context: Context) {}
-    
 }
 
 #if DEBUG
